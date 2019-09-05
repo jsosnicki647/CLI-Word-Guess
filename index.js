@@ -253,10 +253,14 @@ var randomWords = ["enchanting",
     "ripe"
 ]
 
-var word = new Word(randomWords[Math.floor(Math.random() * 250)])
-word.populateLettersArr()
+var word
 
-function promptUser(){
+function createWord(){
+    word = new Word(randomWords[Math.floor(Math.random() * 250)])
+    word.populateLettersArr()
+}
+
+function promptUser() {
     console.log("")
     console.log("Guesses Remaining: " + word.guessesRemaining)
     console.log("")
@@ -266,23 +270,44 @@ function promptUser(){
         .prompt([{
             type: "input",
             message: "What is your guess?",
-            name: "guess"
+            name: "guess",
+            validate: function validateAns(guess){
+                if(guess.length != 1){
+                    console.log("\nEnter only one letter.")
+                }
+                return guess.length == 1
+            }
         }])
         .then(function (res) {
             word.guess(res.guess)
-            // console.log("----------------------------------")
-            // console.log("Guesses Remaining: " + word.guessesRemaining)
-            // console.log(word.displayWord())
-            if(word.guessesRemaining && word.correctCount < word.letters.length){
+
+            if (word.guessesRemaining && word.correctCount < word.letters.length) {
                 promptUser()
-            }
-            else if(word.guessesRemaining == 0){
-                console.log("Out of guesses! The correct word is " + word.whichWord() + ".")
-            }
-            else{
+            } else if (word.guessesRemaining == 0) {
+                console.log("Out of guesses! The correct word is '" + word.whichWord() + "'.")
+                playAgain()
+            } else {
                 console.log("Correct!")
+                playAgain()
             }
         })
 }
 
+function playAgain() {
+    inquirer
+        .prompt([{
+            type: "confirm",
+            message: "Play again?",
+            name: "confirm",
+            default: true
+        }])
+        .then(function (response) {
+            if (response.confirm) {
+                createWord()
+                promptUser()
+            }
+        })
+}
+
+createWord()
 promptUser()

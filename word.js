@@ -11,9 +11,11 @@ module.exports = function Word(word) {
     }
     this.displayWord = function () {
         var dw = ""
+
         for (var i = 0; i < this.letters.length; i++) {
             dw += this.letters[i].verifyGuess()
         }
+        
         return dw
     }
     this.guess = function (c) {
@@ -25,20 +27,15 @@ module.exports = function Word(word) {
             if(this.letters[i].isGuessed){
                 numCorrect++
             }
-            // console.log(this.letters[i].checkGuess(c))
         }
+
         if(this.correctCount >= numCorrect){
             this.guessesRemaining--
         }
+
         this.correctCount = numCorrect
     }
     this.whichWord = function(){
         return word
     }
 }
-
-
-// var w = new Word("pizza")
-// w.populateLettersArr()
-// console.log(w.whichWord())
-// console.log(w.letters)
