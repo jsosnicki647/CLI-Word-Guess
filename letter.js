@@ -12,7 +12,7 @@ module.exports = function (letter) {
         if (this.isGuessed) {
             return this.letter
         } else {
-            return "_"
+            return " _ "
         }
     }
     this.checkGuess = function (c) {

@@ -2,6 +2,8 @@ var Letter = require("./letter.js")
 
 module.exports = function Word(word) {
     this.letters = []
+    this.guessesRemaining = 5
+    this.correctCount = 0
     this.populateLettersArr = function () {
         for (var i = 0; i < word.length; i++) {
             this.letters[i] = new Letter(word.charAt(i))
@@ -12,18 +14,27 @@ module.exports = function Word(word) {
         for (var i = 0; i < this.letters.length; i++) {
             dw += this.letters[i].verifyGuess()
         }
-        console.log(dw)
+        return dw
     }
     this.guess = function (c) {
-        console.log("letter: " + c)
+        var isCorrect = false
+        var numCorrect = 0
+
         for (var i = 0; i < this.letters.length; i++) {
             this.letters[i].checkGuess(c)
-            // if(!this.isCorrect && this.letters[i].checkGuess(c)){
-            //     this.isCorrect = true
-            // }
+            if(this.letters[i].isGuessed){
+                numCorrect++
+            }
+            // console.log(this.letters[i].checkGuess(c))
         }
+        if(this.correctCount >= numCorrect){
+            this.guessesRemaining--
+        }
+        this.correctCount = numCorrect
     }
-    // this.isCorrect = false
+    this.whichWord = function(){
+        return word
+    }
 }
 
 

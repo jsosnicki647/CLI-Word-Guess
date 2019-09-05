@@ -255,9 +255,13 @@ var randomWords = ["enchanting",
 
 var word = new Word(randomWords[Math.floor(Math.random() * 250)])
 word.populateLettersArr()
-var guessesRemaining = 5
 
 function promptUser(){
+    console.log("")
+    console.log("Guesses Remaining: " + word.guessesRemaining)
+    console.log("")
+    console.log(word.displayWord())
+    console.log("")
     inquirer
         .prompt([{
             type: "input",
@@ -266,10 +270,17 @@ function promptUser(){
         }])
         .then(function (res) {
             word.guess(res.guess)
-            word.displayWord()
-            guessesRemaining--
-            if(guessesRemaining){
+            // console.log("----------------------------------")
+            // console.log("Guesses Remaining: " + word.guessesRemaining)
+            // console.log(word.displayWord())
+            if(word.guessesRemaining && word.correctCount < word.letters.length){
                 promptUser()
+            }
+            else if(word.guessesRemaining == 0){
+                console.log("Out of guesses! The correct word is " + word.whichWord() + ".")
+            }
+            else{
+                console.log("Correct!")
             }
         })
 }
